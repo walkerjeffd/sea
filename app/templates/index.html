@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="jumbotron" style="background-image: url({{ url_for('static', filename='img/rain-84648_1280_fade.jpg') }}); background-size: 100%;">
+<h1>Stormwater Event Assistant</h1>
+<p>This application was created to assist in stormwater event sampling. It provides one-stop access to weather forecasts from multiple websites and for individual locations.</p>
+<a href="{{ url_for('main.locations') }}" class="btn btn-primary"><b>Locations</b> <span class="glyphicon glyphicon-chevron-right"></span></a>
+</div>
+{% endblock %}

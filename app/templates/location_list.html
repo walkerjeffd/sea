@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<h1>Locations</h1>
+<ul class="locations">
+    {% for location in locations|sort(attribute='name') %}
+    <li class="location">
+        <div class="title">
+            <a href="{{ url_for('.location', id=location.id) }}">{{ location.name }}</a>
+        </div>
+        <div>
+            <span class="label label-default">{{ location.latitude }}, {{ location.longitude }}</span>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

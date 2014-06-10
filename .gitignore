@@ -1,0 +1,9 @@
+data/
+*.qgs
+.ipynb_checkpoints/
+
+*.pyo
+*.pyc
+
+*.sqlite
+*sublime*

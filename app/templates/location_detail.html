@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% set link_nws = "http://forecast.weather.gov/MapClick.php?FcstType=graphical&lat=%f&lon=%f" % (location.latitude,location.longitude) %}
+{% set link_radar = "http://radar.weather.gov/Conus/northeast.php" %}
+{% set link_forecastio_embed = "http://forecast.io/embed/#lat=%f&lon=%f" % (location.latitude,location.longitude) %}
+{% set link_forecastio_lines = "http://forecast.io/lines/#/f/lat=%f&lon=%f" % (location.latitude,location.longitude) %}
+{% set link_forecastio = "http://forecast.io/#/f/%f,%f" % (location.latitude,location.longitude) %}
+{% set link_wunderground = "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=%f,%f" % (location.latitude,location.longitude) %}
+
+{% block page_content %}
+<h1>{{ location.name }}</h1>
+<span class="label label-default">{{ location.latitude }}, {{ location.longitude }}</span>
+<hr>
+<div class="forecast-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#qpf" data-toggle="tab">QPF</a></li>
+        <li><a href="#nws" data-toggle="tab">NWS</a></li>
+        <li><a href="#radar" data-toggle="tab">Radar</a></li>
+        <li><a href="#forecastio" data-toggle="tab">Forecast.io</a></li>
+        <li><a href="#wunderground" data-toggle="tab">Wunderground</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="qpf">
+            <div class="tab-btn">
+                <a href="{{ url_for('.update_location', id=location.id) }}" class="btn btn-primary {% if location.is_outdated(hours=6) %}disabled{% endif %}">Update {% if location.is_outdated(hours=6) %}(up to date){% else %}<span class="glyphicon glyphicon-refresh"></span>{% endif %}</a>
+                <div class="pull-right">
+                    <a class="btn btn-default" href="http://www.hpc.ncep.noaa.gov/qpf/qpf2.shtml" target="_blank">External <span class="glyphicon glyphicon-new-window"></span></a>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <th>Product</th>
+                    <th>Period</th>
+                    <th>Duration</th>
+                    <th>Valid Period (local tz)</th>
+                    <th>Amount (in)</th>
+                    <th>Updated</th>
+                </thead>
+                <tbody>
+                    {% for forecast in location.latest_forecasts|sort(attribute='valid_start')|sort(attribute='valid_end') %}
+                        <tr class={% if forecast.duration == 24 %}
+                                "info"
+                            {% elif forecast.duration == 48 %}
+                                "warning"
+                            {% elif forecast.duration > 48 %}
+                                "danger"
+                            {% else %}
+                                ""
+                            {% endif %}>
+                            <td>{{ forecast.product }}</td>
+                            <td>{{ forecast.period }}</td>
+                            <td>{{ forecast.duration }}</td>
+                            <td>{{ moment(forecast.valid_start).format('ddd h a') }} -
+                                {{ moment(forecast.valid_end).format('ddd h a') }}</td>
+                            <td>{{ AMOUNTS[forecast.value] }}</td>
+                            <td>{{ moment(forecast.timestamp).fromTime(now) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="nws">
+            <div class="tab-btn pull-right">
+                <a class="btn btn-default" href="{{ link_nws }}" target="_blank">External <span class="glyphicon glyphicon-new-window"></span></a>
+            </div>
+            <iframe src="{{ link_nws }}" frameborder="0" class="full-tab"></iframe>
+        </div>
+        <div class="tab-pane" id="radar">
+            <div class="tab-btn pull-right">
+                <a class="btn btn-default" href="{{ link_radar }}" target="_blank">External <span class="glyphicon glyphicon-new-window"></span></a>
+            </div>
+            <iframe src="{{ link_radar }}" frameborder="0" class="full-tab"></iframe>
+        </div>
+        <div class="tab-pane" id="forecastio">
+            <div class="tab-btn pull-right">
+                <a class="btn btn-default" href="{{ link_forecastio }}" target="_blank">External <span class="glyphicon glyphicon-new-window"></span></a>
+            </div>
+            <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="{{ link_forecastio_embed }}"> </iframe>
+            <hr>
+            <iframe src="{{ link_forecastio_lines }}" frameborder="0" class="full-tab"></iframe>
+        </div>
+        <div class="tab-pane" id="wunderground">
+            <div class="tab-btn pull-right">
+                <a class="btn btn-default" href="{{ link_wunderground }}" target="_blank">External <span class="glyphicon glyphicon-new-window"></span></a>
+            </div>
+            <iframe src="{{ link_wunderground }}" frameborder="0" class="full-tab"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
