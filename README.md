@@ -24,3 +24,47 @@ Edit `config.py` with application settings.
 python manage.py runserver -r -d
 ```
 
+## Setting up Heroku
+
+make sure Procfile contains this line:
+
+    web: gunicorn manage:app
+
+login to heroku, enter username and password
+
+    heroku login
+
+create application where <app_name> is the name of the heroku application (e.g. open-water-demo)
+
+    heroku create <app_name>
+
+add PostgreSQL database addon
+
+    heroku addons:add heroku-postgresql:dev
+
+promote PostgreSQL database (sets the URI to DATABASE_URL), note replace <COLOR>
+
+    heroku pg:promote HEROKU_POSTGRESQL_<COLOR>_URL
+
+set environmental variables on heroku (see above, do all *except* DATABASE_URL)
+
+    heroku config:set NAME=value
+
+make sure requirements.txt exists in top level, which Heroku uses to install dependencies
+
+push to Heroku using git
+
+    git push heroku master
+
+run deploy command
+
+    heroku run python manage.py deploy
+
+restart heroku
+
+    heroku restart
+
+review logs
+
+    heroku logs
+
