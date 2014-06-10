@@ -1,7 +1,7 @@
 from . import db
 from flask import current_app
 from datetime import datetime
-from qpf import *
+from .qpf import *
 import os
 
 class Forecast(db.Model):
