@@ -1,6 +1,6 @@
 data/
-*.qgs
-.ipynb_checkpoints/
+
+*.bak
 
 *.pyo
 *.pyc

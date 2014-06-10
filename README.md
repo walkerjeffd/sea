@@ -52,6 +52,12 @@ set environmental variables on heroku (see above, do all *except* DATABASE_URL)
 
 make sure requirements.txt exists in top level, which Heroku uses to install dependencies
 
+add [buildpack for GEOS](https://github.com/JasonSanford/heroku-buildpack-python-geos) (used by shapely)
+
+    heroku config:set BUILDPACK_URL=git://github.com/JasonSanford/heroku-buildpack-python-geos.git
+    heroku config:set LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib
+    heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib
+
 push to Heroku using git
 
     git push heroku master
