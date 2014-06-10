@@ -1,4 +1,3 @@
-libgdal-dev
 -r requirements/common.txt
 gunicorn
 psycopg2
