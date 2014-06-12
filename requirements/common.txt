@@ -17,4 +17,4 @@ itsdangerous==0.24
 pyproj==1.9.3
 python-dateutil==2.2
 six==1.6.1
-git+git://github.com/walkerjeffd/Fiona.git
+https://github.com/walkerjeffd/Fiona/archive/master.zip
