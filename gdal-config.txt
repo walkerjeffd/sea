@@ -1,0 +1,2 @@
+-I/app/.geodjango/gdal/include
+-L/app/.geodjango/gdal/lib -lgdal
