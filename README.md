@@ -46,25 +46,55 @@ promote PostgreSQL database (sets the URI to DATABASE_URL), note replace <COLOR>
 
     heroku pg:promote HEROKU_POSTGRESQL_<COLOR>_URL
 
-set environmental variables on heroku (see above, do all *except* DATABASE_URL)
+generate secret key
 
-    heroku config:set NAME=value
+    import os
+    os.urandom(24)
+
+    'Z\xe7\x83\xfb"J\xcdJ\xf1\xcb\xc8\xf6\xe7\xc7\x9d\xc1k6\xf4\xf1 S\x1fE'
+
+copy result and set SECRET_KEY env var
+
+    heroku config:set SECRET_KEY=...
 
 make sure requirements.txt exists in top level, which Heroku uses to install dependencies
+IMPORTANT: remove fiona from requirements/common.txt temporarily (add it in later)
 
 add [buildpack for GEOS](https://github.com/JasonSanford/heroku-buildpack-python-geos) (used by shapely)
 
     heroku config:set BUILDPACK_URL=git://github.com/JasonSanford/heroku-buildpack-python-geos.git
-    heroku config:set LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib
-    heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib
+
+    heroku config:set BUILDPACK_URL=git://github.com/dulaccc/heroku-buildpack-geodjango.git
 
 push to Heroku using git
 
     git push heroku master
 
+update PATH
+
+    heroku config:set PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.geodjango/gdal/bin
+
+set library paths
+
+    heroku config:set LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/lib:vendor/gdal/gdal/lib
+    heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/lib:vendor/gdal/gdal/lib
+    heroku config:set CPATH=vendor/geos/geos/include:vendor/proj/include:vendor/gdal/gdal/include
+    heroku config:set C_INCLUDE_PATH=vendor/geos/geos/include:vendor/proj/include:vendor/gdal/gdal/include
+    heroku config:set CPLUS_INCLUDE_PATH=vendor/geos/geos/include:vendor/proj/include:vendor/gdal/gdal/include
+
+
+
+add fiona back into requirements/common.txt
+
+    fiona==1.1.5
+
 run deploy command
 
     heroku run python manage.py deploy
+
+launch a worker
+
+    heroku ps:scale worker=1
 
 restart heroku
 
