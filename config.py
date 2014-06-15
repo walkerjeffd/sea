@@ -18,8 +18,8 @@ class DevelopmentConfig(Config):
     QPF_SHP_FOLDER = os.path.join(basedir, 'data', 'shp')
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'open-water.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SEA_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
     QPF_TAR_FOLDER = os.path.join(basedir, 'data', 'tar')
     QPF_SHP_FOLDER = os.path.join(basedir, 'data', 'shp')
 

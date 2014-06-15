@@ -4,8 +4,9 @@ from app import create_app, db
 from app.models import Location, Forecast
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+import os
 
-app = create_app('development')
+app = create_app(os.environ('SEA_CONFIG') or 'development')
 manager = Manager(app)
 migrate = Migrate(app, db)
 

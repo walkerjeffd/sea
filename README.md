@@ -24,7 +24,19 @@ Edit `config.py` with application settings.
 python manage.py runserver -r -d
 ```
 
+## Setting up Dreamhost
+
+add subdomain
+
+create virtualenv
+
+create passenger_wsgi.py
+
+upload via ftp
+
 ## Setting up Heroku
+
+**NOTE: CANNOT INSTALL FIONA ON HEROKU**
 
 make sure Procfile contains this line:
 
@@ -81,8 +93,6 @@ set library paths
     heroku config:set CPATH=vendor/geos/geos/include:vendor/proj/include:vendor/gdal/gdal/include
     heroku config:set C_INCLUDE_PATH=vendor/geos/geos/include:vendor/proj/include:vendor/gdal/gdal/include
     heroku config:set CPLUS_INCLUDE_PATH=vendor/geos/geos/include:vendor/proj/include:vendor/gdal/gdal/include
-
-
 
 add fiona back into requirements/common.txt
 
